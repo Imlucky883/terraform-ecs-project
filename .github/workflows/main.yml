@@ -8,7 +8,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest  
-
+    env:
+        # The AWS credentials to use for pushing the image
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -23,9 +27,4 @@ jobs:
       run: |
         docker build -t ${{ env.ECR_REPOSITORY}}/nodeapp:${{ env.RELEASE_VERSION}} .
         docker push ${{ env.ECR_REPOSITORY}}/nodeapp:${{ env.RELEASE_VERSION}}
-      env:
-        # The AWS credentials to use for pushing the image
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
         
