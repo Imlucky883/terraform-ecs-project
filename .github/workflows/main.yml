@@ -29,7 +29,6 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: v1
         IMAGE_NAME: my_image
       run: |
         # Build a docker container and
