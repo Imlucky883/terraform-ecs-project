@@ -16,7 +16,7 @@ jobs:
       id: vars
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Login to Amazon ECR
-       env:
+      env:
         # The AWS credentials to use for pushing the image
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
