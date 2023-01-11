@@ -23,12 +23,12 @@ variable "app_count"{
     default = 2
 }
 
-variable "fargate-cpu"{
+variable "fargate_cpu"{
     description= "Fargate instace CPU( in CPU Units)"
     default = "1024"
 }
 
-variable "fargate-cpu"{
+variable "fargate_cpu"{
     description= "Fargate instace memory( in MiB )"
     default = "2048"
 }

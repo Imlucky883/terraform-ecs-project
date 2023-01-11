@@ -1,4 +1,4 @@
-resource "aws_lb" "my-alb" {
+resource "aws_lb" "my_alb" {
   name               = "Gawin's-alb"
   internal           = false
   load_balancer_type = "application"
@@ -24,7 +24,7 @@ resource "aws_lb_target_group" "my_target_group" {
 }
 
 resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.my_alb.id
+  load_balancer_arn = aws_lb.my_alb.arn
   port              = var.app_port
   protocol          = "HTTP"
 
