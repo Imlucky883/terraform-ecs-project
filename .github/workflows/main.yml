@@ -7,24 +7,23 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
       
-    - name: Build Docker image
-      uses: aws-actions/configure-aws-credentials@v1
-      with: 
+    - name: Set Relase version
+      id: vars
+      run: echo "RELEASE_VERSION-S(GITHUB REF#refs/"/)" >> $GITHUB_ENV
+    - name: build docker image and push to ecr repo
+      run: |
+        $(aws ecr get-login-no-include-email-region ap-south-1)
+        docker build -t ${{ env.ECR_REPOSITORY}}/nodeapp:${{ env.RELEASE_VERSION}} .
+        docker push ${{ env.ECR_REPOSITORY}}/nodeapp:${{ env.RELEASE_VERSION}}
+      env:
         # The AWS credentials to use for pushing the image
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
         
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      run: |
-        # Build a docker container and push it to ECR so that it can be deployed to ECS.
-        docker build -t my_image:0.1 .
-        docker push ${{ env.ECR_REGISTRY}}/${{ env.$ECR_REPOSITORY}}/my_image:0.1
-        echo "image=${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}" >> $GITHUB_OUTPUT
