@@ -21,7 +21,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Login to Amazon ECR
-      run: $(aws ecr get-login-password --no-include-email --region us-east-1)
+      run: $(aws ecr get-login-password --region us-east-1)
 
     - name: Build, tag, and push the image to Amazon ECR
       id: build-image
