@@ -11,11 +11,12 @@ jobs:
      - name: Check out the repo
        uses: actions/checkout@v2
      - name: Login to Amazon ECR Public
+       env:
+        AWS_REGION: us-east-1
        id: login-ecr-public
        uses: aws-actions/amazon-ecr-login@v1
        with:
         registry-type: public
-        aws-region: ${{secrets.AWS_REGION}}
 
      - name: Build, tag, and push docker image to Amazon ECR Public
        env:
