@@ -9,6 +9,11 @@ jobs:
    runs-on: ubuntu-latest
    steps:
       # see: https://github.com/aws-actions/configure-aws-credentials
+      - name: Check working directory
+        run: pwd
+      - name: Check Dockerfile path
+        run: ls -al 
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
