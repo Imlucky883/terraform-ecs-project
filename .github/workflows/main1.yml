@@ -1,0 +1,35 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{secrets.AWS_REGION}}
+
+    - name: Build the Docker image
+      run: |
+        docker build -t my-image .
+
+    - name: Tag the image
+      run: |
+        export REPOSITORY=${{ steps.login-ecr.outputs.registry }}/my-image
+        docker tag my-image $REPOSITORY:${{ github.sha }}
+
+    - name: Push the image
+      run: |
+        docker push $REPOSITORY:${{ github.sha }}
