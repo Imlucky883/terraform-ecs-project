@@ -32,7 +32,7 @@ jobs:
           ECR_REPOSITORY: my_image
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -f Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG /home/runner/work/terraform-ecs-project/terraform-ecs-project/Dockerfile
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Log out of Amazon ECR
