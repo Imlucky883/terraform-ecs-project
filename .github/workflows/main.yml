@@ -10,15 +10,17 @@ jobs:
     steps:
      - name: Check out the repo
        uses: actions/checkout@v2
-     - name: Set Relase version
-       id: vars
-       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-     - name: build docker image and push to ecr repo
-       run: |
-          sudo $(aws ecr get-login --no-include-email --region us-east-1)
-          sudo docker build -t my_repo/nodeapp:latest .
-          sudo docker push my_repo/nodeapp:latest
+     - name: Login to Amazon ECR Public
+       id: login-ecr-public
+       uses: aws-actions/amazon-ecr-login@v1
+       with:
+          registry-type: public
+
+     - name: Build, tag, and push docker image to Amazon ECR Public
        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1
+        REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+        REPOSITORY: my-ecr-public-repo
+        IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
